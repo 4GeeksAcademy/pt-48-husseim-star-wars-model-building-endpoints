@@ -9,9 +9,6 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     favorites = db.relationship('Favorites', back_populates='user')
 
-    def __repr__(self):
-        return '<User %r>' % self.username
-
     def serialize(self):
         return {
             "id": self.id,
@@ -44,6 +41,12 @@ class Character(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
     item = db.relationship('Item', back_populates='characters')
     favorites = db.relationship('Favorites', back_populates='characters')
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+        }
      
 class Planet(db.Model):
     __tablename__ = 'planets'
@@ -59,6 +62,12 @@ class Planet(db.Model):
     item = db.relationship('Item', back_populates='planets')
     favorites = db.relationship('Favorites', back_populates='planets')
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+        }
+
 class Vehicle(db.Model):
     __tablename__ = 'vehicles'
     id = db.Column(db.Integer, primary_key=True)
@@ -72,6 +81,12 @@ class Vehicle(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
     item = db.relationship('Item', back_populates='vehicles')
     favorites = db.relationship('Favorites', back_populates='vehicles')
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+        }
 
 class Favorites(db.Model):
     __tablename__ = 'favorites'
@@ -91,3 +106,12 @@ class Favorites(db.Model):
     
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
     item = db.relationship('Item', back_populates='favorites')
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "planets_id": self.planets_id,
+            "characters_id": self.characters_id,
+            "vehicles_id": self.vehicles_id,
+        }
